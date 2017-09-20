@@ -1,81 +1,100 @@
+
 public class SingleLinkedList {
 
 	Node head;
+	int size;
 	
 	public SingleLinkedList() {
 		this.head = null;
+		this.size = 0;
 	}
+	
+	public Boolean checkEmpty() {
+		if (size > 0)
+			return false;
+		return true;
+	}
+	
 	//get head value
 	public int getHeadValue() {
-		if(this.head == null & this.findSize() == 0) {
+		if(this.checkEmpty()) {
 			//create new null head node
-			Node newHead = new Node(17);
-			this.head = newHead;
+			Node newHead = new Node(404);
+			head = newHead;
 			return newHead.getValue();
+		} else {
+		return head.getValue();
 		}
-		return this.head.getValue();
 	}
 	
 	//create new head
 	public void addNewHead(int value) {
-		Node currentHead = this.head;
-		if (currentHead == null) {
+		if(this.checkEmpty()) {
 			Node newHead = new Node(value);
-			this.head = newHead;
-		}
+			head = newHead;
+			size++;
+		} else {
 		Node newHead = new Node(value);
+		Node currentHead = head;
 		newHead.setNext(currentHead);
-		this.head = newHead;
+		head = newHead;
+		size++;
+		}
 	}
 
 	//delete head
 	public void deleteHead() {
-		if(this.head == null & this.findSize() == 0) {
+		if(this.checkEmpty()) {
 			System.out.println("No existing node.");
-		}
+		} else {
 		Node currentHead = this.head;
 		Node nextHead = currentHead.getNext();
-		this.head = nextHead;
+		head = nextHead;
 		currentHead.setNext(null);
+		size--;
+		}
 	}
+	
 	// Recursive
 	private Node getLastNode(Node n) {
 		// Base condtion
 		if(n.getNext() == null){
 			return n;
 		}
-
 		// Recursion
 		return getLastNode(n.getNext());
 	}
 
 	//add tail
-	public void addTail(int value) {
-		Node currentTail = this.getLastNode(this.head);
+	public void addNewTail(int value) {
+		Node currentTail = getLastNode(this.head);
 		Node newTail = new Node(value);
-		currentTail.setNext(newTail); 
+		currentTail.setNext(newTail);
+		size++;
 	}
 
 	//delete tail
 	public void deleteTail() {
-		Node temp = this.head;
-		while (temp.getNext() != this.getLastNode(this.head))
+		Node temp = head;
+		while (temp.getNext() != getLastNode(head))
 			temp = temp.getNext();
 		Node tail = temp;
 		tail.setNext(null);
+		size--;
 	}
    
 	//create new node at end of link
 	public void put(int i) {
 		Node n = new Node(i);
-
 		// 1. LinkedList is empty
-		if(this.head == null) {
-			this.head = n;
+		if(head == null) {
+			head = n;
+			size++;
 		}
 		// 2. LinkedList is not empty
 		else {
 			getLastNode(head).setNext(n);
+			this.size++;
 		}
 	}
 	
@@ -109,6 +128,7 @@ public class SingleLinkedList {
 			throw new IllegalArgumentException("Index out of bound.");
 		}else if (index == 0) {
 			head = head.getNext();
+			size--;
 		}else {
 			Node p = getNode(index - 1);
 			Node c = p.getNext();//kill target
@@ -116,12 +136,13 @@ public class SingleLinkedList {
 
 			p.setNext(n);
 			c.setNext(null);
+			size--;
 		}
 	}
 
 	//get list size
 	public int findSize() {
-		if (head != null) {
+		if (!this.checkEmpty()) {
 			int num = 1;
 			for (Node n = head; n.getNext() != null; n = n.getNext())
 				num++;
@@ -152,6 +173,7 @@ public class SingleLinkedList {
 			this.head = temp;
 			head = this.head;
 		}
+		this.size = 0;
 	}
 	
 	public static void main(String[] args) {
@@ -181,22 +203,19 @@ public class SingleLinkedList {
 		
 		System.out.println("CURRENT SIZE OF LIST: "+ list.findSize());
 		System.out.println(list);
+		System.out.println(list.size);
 		
 		list.clearList();
-		System.out.println();
+		list.getHeadValue();
+		System.out.println(list);
 		System.out.println();
 		list.put(707);
 		System.out.println(list);
-		list.addTail(44);
+		list.addNewTail(44);
 		System.out.println(list);
 		list.deleteTail();
 		System.out.println(list);
 		list.addNewHead(606);
 		System.out.println(list.getHeadValue());
-		System.out.println(list);
-		list.deleteHead();
-		list.deleteHead();
-		System.out.println(list.getHeadValue());
-		System.out.println(list);
 	}
 }
